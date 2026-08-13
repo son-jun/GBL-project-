@@ -1,0 +1,135 @@
+@import 'tailwindcss';
+
+/**
+ * FEELCONOMY LAB 디자인 토큰 (v3 — 밝고 포근한 톤으로 전면 교체).
+ *
+ * v2까지는 어두운 배경 + 청록/보라 글로우 + 유리질감 카드로, "데이터 랩"
+ * 느낌은 있었지만 전형적인 다크 SaaS/AI 데모 톤에 가까웠다("AI스럽다"는
+ * 피드백). v3는 "필(Feel)+코노미(economy)"라는 이름에 맞춰 밝고 따뜻한
+ * 톤으로 바꾼다: 따뜻한 아이보리 배경, 코랄·앰버 계열 강조색, 은은한 종이
+ * 질감. 글로우/블러 대신 부드러운 종이 그림자를 쓴다.
+ *
+ * 토큰 이름(--color-lab-*)은 이전 버전과 동일하게 유지했다 — 값만 바꿔서
+ * 모든 페이지·컴포넌트가 자동으로 새 톤을 따르게 하기 위함이다.
+ */
+@theme {
+  --color-lab-bg: #fbf5ec;
+  --color-lab-surface: #fffdf9;
+  --color-lab-surface-2: #f3e9da;
+  --color-lab-border: #e8dac2;
+  --color-lab-border-strong: #dcc9a8;
+  --color-lab-text: #3a2f24;
+  --color-lab-muted: #8a7968;
+  --color-lab-muted-2: #a89a82;
+
+  --color-lab-accent: #ff7a4a; /* 코랄 — 주 강조 */
+  --color-lab-accent-2: #f2a340; /* 앰버 — 보조 강조 */
+  --color-lab-warn: #d98a2b;
+  --color-lab-danger: #d9584a;
+  --color-lab-positive: #6a9c5c;
+
+  /* 학교 브랜드 컬러 — 로고의 짙은 그린을 소량 포인트로 사용 */
+  --color-brand-green: #1f5e4c;
+  --color-brand-green-light: #2f8a6c;
+
+  /* "나" 위치 표시 전용 색 — 군집 색과 겹치지 않는 진한 브라운 */
+  --color-mark-me: #3a2f24;
+
+  /* 군집/유형 색상 (최대 8개). 색상만으로 구분하지 않고 항상 번호/도형과 함께 쓴다 */
+  --color-cluster-1: #e2704a;
+  --color-cluster-2: #d9a441;
+  --color-cluster-3: #7fae7a;
+  --color-cluster-4: #6f9bc9;
+  --color-cluster-5: #b6764f;
+  --color-cluster-6: #cb6f8e;
+  --color-cluster-7: #8a8140;
+  --color-cluster-8: #a97c9e;
+
+  --font-sans:
+    'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', 'D2Coding', monospace;
+
+  --shadow-glow-accent: 0 1px 2px rgba(58, 47, 36, 0.06), 0 10px 24px -10px rgba(255, 122, 74, 0.45);
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 10px 28px -18px rgba(58, 47, 36, 0.25);
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-lab-bg);
+  color: var(--color-lab-text);
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+  min-height: 100dvh;
+  letter-spacing: -0.011em;
+}
+
+/*
+ * 배경 — 은은한 종이 질감. 이전의 네온 그라디언트 블롭 대신, 아주 옅은
+ * 온기 있는 얼룩(warm blotch) 두 개만 살짝 얹어 "손으로 만진 종이" 같은
+ * 인상을 준다. 과하지 않게 opacity를 낮게 유지한다.
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(50% 40% at 12% 0%, rgba(255, 122, 74, 0.07), transparent 65%),
+    radial-gradient(45% 35% at 100% 15%, rgba(242, 163, 64, 0.08), transparent 65%);
+}
+
+/* 아주 미세한 종이 그레인 — 완전히 평평한 색면이 주는 인공적인 느낌을 줄인다 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lab-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes lab-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lab-enter {
+  animation: lab-fade-up 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
