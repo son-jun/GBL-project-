@@ -1,0 +1,30 @@
+{
+  /*
+   * 빌드 도구 설정 파일(vite.config.ts, vitest.config.ts) 전용 tsconfig.
+   *
+   * tsconfig.json은 include가 ["src"]라서 루트의 설정 파일들이 어떤 프로젝트에도
+   * 속하지 않았다. 그래서 에디터가 이 파일들을 열면 "프로젝트 파일 목록에 없다"고
+   * 경고하고, node:path·node:url 같은 Node 내장 모듈 타입도 찾지 못했다.
+   * (tsc -b는 이 파일들을 아예 보지 않으니 빌드는 통과 — 에디터에만 빨간 줄이
+   * 뜨는 상태였다.)
+   *
+   * 이 파일들은 브라우저가 아니라 Node에서 실행되므로, 앱 코드와 다른 환경
+   * (DOM 대신 node 타입)이 필요하다. 그래서 tsconfig.json에 합치지 않고
+   * 별도 프로젝트로 분리했다 — Vite 공식 템플릿과 같은 구성이다.
+   */
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["vite.config.ts", "vitest.config.ts"]
+}
