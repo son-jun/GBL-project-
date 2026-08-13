@@ -112,7 +112,7 @@ export const FEELCONOMY_TYPES: Record<string, FeelconomyTypeDef> = {
     description:
       '즉흥적이고 자유로운 성향으로, 강렬한 즐거움을 나만의 방식으로 만끽합니다. 정해진 틀보다 지금 이 순간의 재미를 우선합니다.',
     icon: '🎈',
-    color: '#FF8F6B',
+    color: '#EF8D6C', // 기존 #FF8F6B는 채도 100%로 과포화, 다른 유형색과 톤을 맞춰 살짝 낮춤
     exampleAlternatives: ['gaming', 'content'],
   },
   SWG: {
@@ -122,7 +122,7 @@ export const FEELCONOMY_TYPES: Record<string, FeelconomyTypeDef> = {
     description:
       '사람들과 함께 도전하고 성장하는 데서 에너지를 얻는 유형입니다. 목표를 향해 사람들을 이끌고 함께 나아가는 것을 즐깁니다.',
     icon: '🔥',
-    color: '#D9534F',
+    color: '#CF5B4A', // 기존 #D9534F는 특정 UI 프레임워크의 기본 danger색과 우연히 같아 톤을 조정
     exampleAlternatives: ['travel', 'culture'],
   },
   SWJ: {
@@ -132,7 +132,7 @@ export const FEELCONOMY_TYPES: Record<string, FeelconomyTypeDef> = {
     description:
       '사람들과 함께 신나는 순간을 만드는 분위기 메이커입니다. 즐거움은 나눌 때 배가 된다고 믿습니다.',
     icon: '🎉',
-    color: '#F4A93F',
+    color: '#E7A240', // 기존 #F4A93F는 채도가 높아 다른 유형색보다 튀었던 것을 살짝 낮춤
     exampleAlternatives: ['culture', 'food'],
   },
   RMG: {
@@ -143,7 +143,8 @@ export const FEELCONOMY_TYPES: Record<string, FeelconomyTypeDef> = {
       '안정된 상태에서 스스로 계획하고 하나씩 성취해가는 유형입니다. 혼자만의 속도로 꾸준히 나아가는 것을 편안해합니다.',
     icon: '🌱',
     color: '#7FAE7A',
-    exampleAlternatives: ['lifestyle', 'content'],
+    // v3에서 '생활·실용'이 대안 목록에서 빠졌으므로 다른 예시로 교체했다
+    exampleAlternatives: ['content', 'fashion'],
   },
   RMJ: {
     code: 'RMJ',
@@ -153,7 +154,8 @@ export const FEELCONOMY_TYPES: Record<string, FeelconomyTypeDef> = {
       '혼자만의 편안한 시간 속에서 소소하지만 확실한 즐거움을 찾는 유형입니다. 조용한 몰입이 가장 큰 힐링입니다.',
     icon: '🕯️',
     color: '#A97C50',
-    exampleAlternatives: ['cafe', 'content'],
+    // v3에서 '카페·디저트'가 '식음료'로 통합되었으므로 food로 교체했다
+    exampleAlternatives: ['food', 'content'],
   },
   RWG: {
     code: 'RWG',
@@ -163,7 +165,8 @@ export const FEELCONOMY_TYPES: Record<string, FeelconomyTypeDef> = {
       '신뢰하는 사람들과 안정적으로 성장해가는 것을 선호하는 유형입니다. 조급하지 않게, 함께 오래가는 관계를 중요하게 여깁니다.',
     icon: '🤝',
     color: '#D4B36A',
-    exampleAlternatives: ['lifestyle', 'food'],
+    // v3에서 '생활·실용'이 대안 목록에서 빠졌으므로 다른 예시로 교체했다
+    exampleAlternatives: ['travel', 'food'],
   },
   RWJ: {
     code: 'RWJ',
@@ -173,7 +176,8 @@ export const FEELCONOMY_TYPES: Record<string, FeelconomyTypeDef> = {
       '따뜻하고 편안한 분위기 속에서 사람들과 소소한 즐거움을 나누는 유형입니다. 거창하지 않아도 함께라면 충분합니다.',
     icon: '☕',
     color: '#E0959D',
-    exampleAlternatives: ['cafe', 'food'],
+    // v3에서 '카페·디저트'가 '식음료'로 통합되었으므로 다른 예시로 교체했다
+    exampleAlternatives: ['culture', 'content'],
   },
 }
 

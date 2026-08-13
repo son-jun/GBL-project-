@@ -13,8 +13,10 @@
 import { describe, expect, it } from 'vitest'
 import { ALTERNATIVE_DIM } from '@/config/alternatives'
 import { FEELCONOMY_TYPE_CODES, FEELCONOMY_TYPES } from '@/config/feelconomyTypes'
+import { MBTI_AXES } from '@/config/mbtiAxes'
 import { ANALYSIS_SPEC } from '@/config/model'
-import { NEED_DIM } from '@/config/needs'
+import { NEED_AXES, NEED_DIM } from '@/config/needs'
+import { estimateMbti } from './mbtiEstimate'
 import { nameCluster } from './clusterNaming'
 import {
   compareHandCalculation,
@@ -31,18 +33,17 @@ import { computeSvd, explainProjection, projectMatrixToLatent, projectToLatent }
 
 // ---------------------------------------------------------------------------
 // 테스트 전용 픽스처 — 실제 참가자 데이터가 아니라 계산 검증용 예시 행렬이다.
-// 행 순서는 CONSUMPTION_ALTERNATIVES 순서(식음료·카페·패션·게임·콘텐츠·문화·여행·생활)와
+// 행 순서는 CONSUMPTION_ALTERNATIVES 순서(식음료·패션·게임·콘텐츠·문화·여행)와
 // 동일하고, 열 순서는 NEED_AXES 순서(즐거움·자극·회복·소속·표현·성취)와 동일하다.
+// (v3에서 '카페·디저트'와 '생활·실용'이 대안 목록에서 빠져 해당 행도 함께 지웠다.)
 // ---------------------------------------------------------------------------
 const SAMPLE_RATINGS: number[][] = [
   [6, 4, 7, 7, 3, 3], // 식음료
-  [7, 3, 8, 6, 3, 2], // 카페·디저트
   [6, 6, 4, 5, 9, 4], // 패션
   [8, 8, 5, 5, 4, 7], // 게임
   [7, 6, 6, 4, 4, 3], // 콘텐츠·구독
   [8, 8, 5, 6, 7, 4], // 문화·공연
   [9, 9, 6, 7, 6, 5], // 여행·체험
-  [3, 2, 7, 2, 3, 8], // 생활·실용
 ]
 const SAMPLE_NEEDS = [8, 9, 3, 7, 8, 4] // 현재 감성욕구 q
 
@@ -256,7 +257,7 @@ describe('inference: runPersonalAnalysis', () => {
     expect(members).toContain(result.nearestAlternativeInCluster)
   })
 
-  it('nearestAlternativeOverall은 전체 8개 중 실제 최단거리 대안이다', () => {
+  it('nearestAlternativeOverall은 전체 중 실제 최단거리 대안이다', () => {
     const result = runPersonalAnalysis(
       { currentNeeds: SAMPLE_NEEDS, alternativeRatings: SAMPLE_RATINGS },
       ANALYSIS_OPTIONS,
@@ -382,5 +383,52 @@ describe('typeCode: 필코노미 유형 판정', () => {
     expect(energy.positiveScore).toBe(9) // thrill
     expect(energy.negativeScore).toBe(1) // recovery
     expect(energy.letter).toBe('S')
+  })
+})
+
+describe('mbtiEstimate (MBTI 형식 추정 — 검사 결과가 아님)', () => {
+  // 욕구 순서: [joy, thrill, recovery, belonging, expression, achievement]
+  it('동점이면 항상 앞 문자(E, S, T, J)를 채택한다', () => {
+    expect(estimateMbti([5, 5, 5, 5, 5, 5]).code).toBe('ESTJ')
+  })
+
+  it('네 축이 모두 뒤 문자로 가는 경우를 정확히 판정한다 (INFP)', () => {
+    // I: belonging(5) < recovery(8) / N: joy(6) < thrill(9)
+    // F: achievement(2) < belonging(5) / P: achievement(2) < joy(6)
+    expect(estimateMbti([6, 9, 8, 5, 4, 2]).code).toBe('INFP')
+  })
+
+  it('코드는 항상 4문자이고 각 자리는 그 축의 두 문자 중 하나다', () => {
+    const estimate = estimateMbti([3, 7, 2, 9, 4, 6])
+    expect(estimate.code).toHaveLength(MBTI_AXES.length)
+    estimate.axes.forEach((axis, i) => {
+      expect([MBTI_AXES[i].firstLetter, MBTI_AXES[i].secondLetter]).toContain(axis.letter)
+    })
+  })
+
+  it('같은 욕구 벡터는 항상 같은 코드를 낸다 (재현성)', () => {
+    const needs = [4, 8, 2, 6, 7, 5]
+    expect(estimateMbti(needs).code).toBe(estimateMbti(needs).code)
+  })
+
+  it('축마다 비교에 쓴 원본 점수와 동점 여부가 기록된다', () => {
+    // belonging(6) vs recovery(6) → 동점이라 E
+    const attitude = estimateMbti([4, 8, 6, 6, 7, 5]).axes.find((a) => a.key === 'attitude')!
+    expect(attitude.firstScore).toBe(6)
+    expect(attitude.secondScore).toBe(6)
+    expect(attitude.tied).toBe(true)
+    expect(attitude.letter).toBe('E')
+  })
+
+  it('욕구 개수가 틀리면 오류를 던진다', () => {
+    expect(() => estimateMbti([1, 2, 3])).toThrow(/감성욕구 개수/)
+  })
+
+  it('모든 축이 실제로 존재하는 감성욕구 key를 참조한다', () => {
+    const keys = NEED_AXES.map((a) => a.key)
+    for (const axis of MBTI_AXES) {
+      expect(keys).toContain(axis.firstNeedKey)
+      expect(keys).toContain(axis.secondNeedKey)
+    }
   })
 })

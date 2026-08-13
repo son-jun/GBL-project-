@@ -71,7 +71,7 @@ export interface PersonalAnalysisResult {
   latentDim: number
   svd: PersonalSvdSummary
 
-  /** 소비대안 8개의 잠재좌표. shape = [ALTERNATIVE_DIM][latentDim] */
+  /** 소비대안 전체의 잠재좌표. shape = [ALTERNATIVE_DIM][latentDim] */
   alternativeLatent: number[][]
   /** 현재 감성욕구 벡터를 같은 잠재공간에 투영한 좌표. 길이 = latentDim */
   needProjected: number[]
@@ -89,11 +89,11 @@ export interface PersonalAnalysisResult {
   /** 1위와 2위 군집 거리 차이 */
   marginToSecondCluster: number
 
-  /** 현재 욕구점에서 각 소비대안까지의 거리 (전체 8개) */
+  /** 현재 욕구점에서 각 소비대안까지의 거리 (전체) */
   distancesToAlternatives: number[]
   /** 배정 군집 내부에서 가장 가까운 소비대안의 인덱스 — "세부 잠재수요" */
   nearestAlternativeInCluster: number
-  /** 배정 군집과 무관하게 전체 8개 중 가장 가까운 소비대안 인덱스 (참고용) */
+  /** 배정 군집과 무관하게 전체 중 가장 가까운 소비대안 인덱스 (참고용) */
   nearestAlternativeOverall: number
 }
 

@@ -23,7 +23,11 @@ export function SchoolLogo({
 
   return (
     <img
-      src="/branding/school-logo.png"
+      // BASE_URL을 붙인다. 절대경로('/branding/...')로 두면 GitHub Pages처럼
+      // 하위 경로(/<저장소>/)에서 서비스될 때 파일을 찾지 못하고, 아래 onError가
+      // 이미지를 숨겨버려서 로고가 조용히 사라진다. BASE_URL은 항상 '/'로
+      // 끝나므로 로컬('/')과 배포('/<저장소>/') 양쪽에서 올바른 경로가 된다.
+      src={`${import.meta.env.BASE_URL}branding/school-logo.png`}
       alt="대천대신고등학교 오량진 로고"
       width={size}
       height={size}

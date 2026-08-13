@@ -8,6 +8,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Lead, LinkButton, Notice, ProgressBar, SectionTitle } from '@/components/ui'
 import { ALTERNATIVE_DIM } from '@/config/alternatives'
+import { MBTI_ESTIMATE_BADGE } from '@/config/mbtiAxes'
 import { NEED_DIM } from '@/config/needs'
 import { useSession } from '@/state/SessionContext'
 
@@ -22,7 +23,7 @@ const RECAP_STEPS = [
     icon: '📊',
     title: '소비대안 평가행렬 A',
     plain: `소비대안 ${ALTERNATIVE_DIM}개가 각 욕구를 얼마나 채우는지 평가해, 나만의 행렬을 만들었습니다.`,
-    formula: 'A (8×6)',
+    formula: `A (${ALTERNATIVE_DIM}×${NEED_DIM})`,
   },
   {
     icon: '🗜️',
@@ -33,7 +34,7 @@ const RECAP_STEPS = [
   {
     icon: '📍',
     title: '잠재공간에 배치',
-    plain: '소비대안 8개와 지금 내 욕구가 같은 좌표 공간의 점이 되었습니다.',
+    plain: `소비대안 ${ALTERNATIVE_DIM}개와 지금 내 욕구가 같은 좌표 공간의 점이 되었습니다.`,
     formula: 'Z = A·V_r,  q* = q·V_r',
   },
   {
@@ -63,7 +64,7 @@ const RECAP_STEPS = [
 ]
 
 export function FinishPage() {
-  const { reset, result, participantId, feelconomyType } = useSession()
+  const { reset, result, participantId, feelconomyType, mbtiEstimate } = useSession()
   const navigate = useNavigate()
 
   const startNextParticipant = () => {
@@ -86,6 +87,14 @@ export function FinishPage() {
           <p className="mt-1 text-xl font-black" style={{ color: feelconomyType.type.color }}>
             {feelconomyType.code} · {feelconomyType.type.name} {feelconomyType.type.icon}
           </p>
+          {mbtiEstimate ? (
+            <p className="mt-2 border-t border-lab-border/60 pt-2 text-xs text-lab-muted">
+              MBTI 형식으로 바꿔 보면{' '}
+              <span className="font-mono font-bold text-lab-text">{mbtiEstimate.code}</span>{' '}
+              였습니다 —{' '}
+              <span className="text-lab-warn">{MBTI_ESTIMATE_BADGE}이고 정식 검사는 아닙니다.</span>
+            </p>
+          ) : null}
           <p className="mt-1 text-xs text-lab-muted">오래 기억해 두고, 다음에 또 확인해 보세요.</p>
         </Card>
       ) : null}
@@ -102,7 +111,7 @@ export function FinishPage() {
 
       <div className="mb-5 space-y-2">
         {RECAP_STEPS.map((step, i) => (
-          <div key={step.title}>
+          <div key={step.title} className="lab-stagger" style={{ animationDelay: `${i * 45}ms` }}>
             <Card className="py-3.5">
               <div className="flex gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-lab-surface-2 text-lg">

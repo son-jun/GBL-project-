@@ -3,13 +3,21 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Lead, LinkButton, Notice, SectionTitle } from '@/components/ui'
+import { ALTERNATIVE_DIM } from '@/config/alternatives'
+import { RATING_CELL_COUNT } from '@/config/model'
+import { NEED_DIM, NEED_SCORE_MAX, NEED_SCORE_MIN } from '@/config/needs'
 import { useSession } from '@/state/SessionContext'
 
 const NOT_COLLECTED = ['이름', '전화번호', '이메일', '학번', '학교', '생년월일']
 
+const SCORE_RANGE = `${NEED_SCORE_MIN}~${NEED_SCORE_MAX}점`
+
 const COLLECTED = [
-  { label: '현재 감성욕구 6개', detail: '각각 1~10점' },
-  { label: '소비대안 8개 평가', detail: '48개 점수, 각각 1~10점' },
+  { label: `현재 감성욕구 ${NEED_DIM}개`, detail: `각각 ${SCORE_RANGE}` },
+  {
+    label: `소비대안 ${ALTERNATIVE_DIM}개 평가`,
+    detail: `${RATING_CELL_COUNT}개 점수, 각각 ${SCORE_RANGE}`,
+  },
   { label: '입력 시각', detail: '분석 순서 확인용' },
   { label: '자동 생성 익명 ID', detail: '예: P-20260814-001' },
 ]

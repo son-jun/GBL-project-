@@ -54,6 +54,8 @@ export function NeedsPage() {
               ref={(el) => {
                 rowRefs.current[index] = el
               }}
+              className="lab-stagger"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
               <Card className={value === null ? '' : 'border-lab-accent/30'}>
                 <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">

@@ -23,12 +23,12 @@ const FLOW_PREVIEW = [
 
 export function StartPage() {
   return (
-    <div className="lab-enter space-y-6">
-      <section className="pt-6 text-center sm:pt-12">
-        <div className="mb-5 flex justify-center">
+    <div className="lab-enter space-y-8">
+      <section className="pt-8 text-center sm:pt-16">
+        <div className="mb-6 flex justify-center">
           <SchoolLogo size={64} glow />
         </div>
-        <p className="mb-3 font-mono text-xs tracking-[0.3em] text-lab-accent">
+        <p className="mb-4 font-mono text-xs tracking-[0.3em] text-lab-accent">
           MY DATA · MY LATENT DEMAND
         </p>
         <h1 className="text-4xl leading-tight font-black tracking-tight text-lab-text sm:text-6xl">
@@ -37,7 +37,7 @@ export function StartPage() {
             LAB
           </span>
         </h1>
-        <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-lab-muted sm:text-base">
+        <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-lab-muted sm:text-base">
           지금 내가 원하는 것과, 내가 소비를 통해 얻고 싶은 것들을 숫자로 입력하면
           그 자리에서 나만의 데이터 분석이 시작됩니다. 다른 사람의 데이터는 전혀
           필요 없습니다 — 처음부터 끝까지 오직 나의 데이터로만 계산됩니다.
@@ -47,9 +47,19 @@ export function StartPage() {
       <Card tone="accent">
         <ol className="grid grid-cols-4 gap-3 sm:grid-cols-7">
           {FLOW_PREVIEW.map((step, i) => (
-            <li key={step.label} className="text-center">
-              <div className="mx-auto mb-1.5 flex h-11 w-11 items-center justify-center rounded-2xl border border-lab-border bg-lab-surface-2 text-xl">
+            <li
+              key={step.label}
+              className="lab-stagger text-center"
+              style={{ animationDelay: `${i * 60}ms` }}
+            >
+              <div className="relative mx-auto mb-1.5 flex h-11 w-11 items-center justify-center rounded-2xl border border-lab-border bg-lab-surface-2 text-xl">
                 <span aria-hidden>{step.icon}</span>
+                <span
+                  aria-hidden
+                  className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-lab-accent to-lab-accent-2 font-mono text-[10px] font-bold text-white shadow-[0_2px_6px_rgba(238,125,83,0.5)]"
+                >
+                  {i + 1}
+                </span>
               </div>
               <p className="font-mono text-[10px] text-lab-accent">STEP {i + 1}</p>
               <p className="text-[11px] leading-tight text-lab-muted">{step.label}</p>
@@ -58,7 +68,7 @@ export function StartPage() {
         </ol>
       </Card>
 
-      <div className="flex flex-col items-center gap-3 pt-2">
+      <div className="flex flex-col items-center gap-3">
         <LinkButton to="/consent" size="lg" full>
           시작하기 →
         </LinkButton>

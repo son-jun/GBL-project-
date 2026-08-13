@@ -2,7 +2,7 @@
  * SVD (특이값 분해).
  *
  * v2에서 이 모듈이 분해하는 대상은 "참가자 한 명의 [소비대안 × 감성욕구]
- * 평가행렬 A" (ALTERNATIVE_DIM × NEED_DIM, 예: 8×6)다. 참가자 집단의
+ * 평가행렬 A" (ALTERNATIVE_DIM × NEED_DIM)다. 참가자 집단의
  * 기준 데이터셋을 중심화한 행렬이 아니다 — v2에는 그런 집단 데이터가
  * 아예 존재하지 않는다. 참가자 개인의 원본 평가값을 그대로 분해한다.
  *
@@ -183,7 +183,7 @@ export function projectToLatent(vector: number[], loadings: number[][]): number[
   return z
 }
 
-/** 행렬 전체(소비대안 8개)를 잠재공간으로 투영한다: Z = A · V_r */
+/** 행렬 전체(소비대안 전체)를 잠재공간으로 투영한다: Z = A · V_r */
 export function projectMatrixToLatent(ratings: number[][], loadings: number[][]): number[][] {
   return ratings.map((row) => projectToLatent(row, loadings))
 }

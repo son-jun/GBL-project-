@@ -42,10 +42,10 @@ export function AdminPage() {
             role="tab"
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
-            className={`flex shrink-0 items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-sm font-semibold transition ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-sm font-semibold transition-colors duration-150 ${
               tab === t.id
                 ? 'border-b-2 border-lab-accent bg-lab-surface text-lab-accent'
-                : 'text-lab-muted hover:text-lab-text'
+                : 'text-lab-muted hover:bg-lab-surface-2 hover:text-lab-text'
             }`}
           >
             <span aria-hidden>{t.icon}</span>

@@ -20,6 +20,7 @@ import {
   ProgressBar,
   SectionTitle,
 } from '@/components/ui'
+import { ALTERNATIVE_DIM } from '@/config/alternatives'
 import { CLUSTER_NAMING_EXPLANATION } from '@/lib/math/clusterNaming'
 import { formatCoordinate, formatDistance } from '@/lib/util/format'
 import { useSession } from '@/state/SessionContext'
@@ -69,8 +70,8 @@ function ClusterContent() {
     <>
       <SectionTitle>어느 소비 군집이 가장 가까울까?</SectionTitle>
       <Lead>
-        소비대안 8개를 {result.k}개 군집으로 나누고, 지금 내 욕구점에서 각 군집 중심까지
-        거리를 재서 비교합니다.
+        소비대안 {ALTERNATIVE_DIM}개를 {result.k}개 군집으로 나누고, 지금 내 욕구점에서 각
+        군집 중심까지 거리를 재서 비교합니다.
       </Lead>
 
       <PersonalMap
@@ -93,7 +94,11 @@ function ClusterContent() {
             const isNearest = rank === 0
             const color = clusterColor(cluster.index)
             return (
-              <div key={cluster.index} className="flex items-center gap-2 sm:gap-3">
+              <div
+                key={cluster.index}
+                className="lab-stagger flex items-center gap-2 sm:gap-3"
+                style={{ animationDelay: `${rank * 70}ms` }}
+              >
                 <span
                   className={`w-6 shrink-0 text-center font-mono text-xs ${isNearest ? 'font-black text-lab-accent' : 'text-lab-muted'}`}
                 >
@@ -131,8 +136,12 @@ function ClusterContent() {
         </div>
       </Card>
 
-      <Card tone="accent" className="mt-4">
-        <p className="mb-2 font-mono text-xs tracking-wider text-lab-accent">판정 결과</p>
+      <Card tone="accent" className="relative mt-4 overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-gradient-to-br from-lab-accent/25 to-lab-accent-2/10 blur-2xl"
+        />
+        <p className="relative mb-2 font-mono text-xs tracking-[0.2em] text-lab-accent">판정 결과</p>
         <p className="mb-3 text-base leading-relaxed text-lab-text sm:text-lg">
           현재 나의 욕구가{' '}
           <span className="inline-block align-middle">

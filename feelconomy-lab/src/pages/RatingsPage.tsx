@@ -1,11 +1,11 @@
 /**
  * 페이지 4. 소비대안 평가.
  *
- * 참가자는 8개 소비대안 각각에 대해 "이 소비가 나의 각 감성욕구를 얼마나
+ * 참가자는 각 소비대안에 대해 "이 소비가 나의 각 감성욕구를 얼마나
  * 충족시켜줄 것 같은가"를 1~10점으로 평가한다. 결과는 [소비대안 × 감성욕구]
- * = 8×6 평가행렬이 되고, 이것이 SVD의 유일한 입력이다.
+ * 평가행렬이 되고, 이것이 SVD의 유일한 입력이다.
  *
- * 한 화면에 48칸을 전부 띄우면 부스 활동으로는 부담이 크므로, 소비대안 하나씩
+ * 한 화면에 평가칸을 전부 띄우면 부스 활동으로는 부담이 크므로, 소비대안 하나씩
  * 카드로 넘겨가며 6개 욕구만 평가하는 방식으로 나눴다 (감성욕구 입력 화면과
  * 같은 1~10 버튼 UI를 재사용해 일관된 조작감을 준다).
  */
@@ -41,7 +41,7 @@ export function RatingsPage() {
         평가해 주세요. 실제로 해본 적이 없어도 상상해서 답하면 됩니다.
       </Lead>
 
-      {/* 대안 8개를 오가는 탭 — 완료된 대안은 체크 표시 */}
+      {/* 대안들을 오가는 탭 — 완료된 대안은 체크 표시 */}
       <div className="mb-4 flex flex-wrap gap-1.5">
         {CONSUMPTION_ALTERNATIVES.map((alt, i) => {
           const complete = alternativeRatings[i].every((v) => v !== null)
@@ -51,12 +51,12 @@ export function RatingsPage() {
               key={alt.key}
               type="button"
               onClick={() => goTo(i)}
-              className={`flex min-h-9 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-semibold transition ${
+              className={`flex min-h-9 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-semibold transition-all duration-150 active:scale-95 ${
                 active
                   ? 'border-lab-accent bg-lab-accent/15 text-lab-accent'
                   : complete
-                    ? 'border-lab-positive/30 bg-lab-positive/5 text-lab-muted'
-                    : 'border-lab-border bg-lab-surface-2 text-lab-muted'
+                    ? 'border-lab-positive/30 bg-lab-positive/5 text-lab-muted hover:border-lab-positive/50 hover:text-lab-text'
+                    : 'border-lab-border bg-lab-surface-2 text-lab-muted hover:border-lab-accent/40 hover:text-lab-text'
               }`}
             >
               <span aria-hidden>{alt.icon}</span>
@@ -112,7 +112,7 @@ export function RatingsPage() {
           type="button"
           onClick={() => goTo(current - 1)}
           disabled={current === 0}
-          className="min-h-11 flex-1 rounded-2xl border border-lab-border text-sm font-semibold text-lab-muted transition hover:text-lab-text disabled:opacity-30"
+          className="min-h-11 flex-1 rounded-2xl border border-lab-border text-sm font-semibold text-lab-muted transition-all duration-150 hover:border-lab-accent/40 hover:text-lab-text active:scale-[0.98] disabled:opacity-30 disabled:active:scale-100"
         >
           ← 이전 대안
         </button>
@@ -120,7 +120,7 @@ export function RatingsPage() {
           type="button"
           onClick={() => goTo(current + 1)}
           disabled={current === CONSUMPTION_ALTERNATIVES.length - 1 || !rowComplete}
-          className="min-h-11 flex-1 rounded-2xl border border-lab-border text-sm font-semibold text-lab-muted transition hover:text-lab-text disabled:opacity-30"
+          className="min-h-11 flex-1 rounded-2xl border border-lab-border text-sm font-semibold text-lab-muted transition-all duration-150 hover:border-lab-accent/40 hover:text-lab-text active:scale-[0.98] disabled:opacity-30 disabled:active:scale-100"
         >
           다음 대안 →
         </button>
@@ -134,7 +134,7 @@ export function RatingsPage() {
         {CONSUMPTION_ALTERNATIVES.length} 개 대안 평가 완료
       </div>
 
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row-reverse">
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row-reverse">
         <LinkButton to="/svd" size="lg" full disabled={!ratingsComplete}>
           다음: SVD 분석 →
         </LinkButton>

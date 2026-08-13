@@ -16,6 +16,7 @@ import { ALTERNATIVE_DIM } from '@/config/alternatives'
 import { ANALYSIS_SPEC } from '@/config/model'
 import { NEED_DIM } from '@/config/needs'
 import { runPersonalAnalysis } from '@/lib/math/inference'
+import { estimateMbti } from '@/lib/math/mbtiEstimate'
 import { resolveFeelconomyType } from '@/lib/math/typeCode'
 import { participantRepository } from '@/lib/storage'
 import { generateParticipantId } from '@/lib/util/participantId'
@@ -60,6 +61,12 @@ interface SessionContextValue extends SessionState {
   needsVector: number[] | null
   /** 욕구 입력만으로 결정되는 필코노미 유형. 욕구가 미완성이면 null. */
   feelconomyType: ReturnType<typeof resolveFeelconomyType> | null
+  /**
+   * 같은 욕구 점수를 MBTI 형식으로 옮겨 본 추정. 욕구가 미완성이면 null.
+   * ⚠️ MBTI 검사 결과가 아니다 — 화면에서는 MBTI_ESTIMATE_CAVEAT를 항상
+   * 함께 보여준다 (config/mbtiAxes.ts 참고).
+   */
+  mbtiEstimate: ReturnType<typeof estimateMbti> | null
   ratingsComplete: boolean
   ratingsMatrix: number[][] | null
   /** 평가를 마친 소비대안 개수 (진행률 표시용) */
@@ -116,6 +123,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
    */
   const feelconomyType = useMemo(
     () => (needsVector ? resolveFeelconomyType(needsVector) : null),
+    [needsVector],
+  )
+
+  /** MBTI 형식 추정도 같은 욕구 벡터만으로 결정된다 (MBTI 검사 결과가 아니다) */
+  const mbtiEstimate = useMemo(
+    () => (needsVector ? estimateMbti(needsVector) : null),
     [needsVector],
   )
 
@@ -185,6 +198,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       needsComplete,
       needsVector,
       feelconomyType,
+      mbtiEstimate,
       ratingsComplete,
       ratingsMatrix,
       ratingsCompletedAlternatives,
@@ -199,6 +213,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setRating,
       setLatentDim,
       feelconomyType,
+      mbtiEstimate,
       needsComplete,
       needsVector,
       ratingsComplete,

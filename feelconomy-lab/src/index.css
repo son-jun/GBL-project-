@@ -22,7 +22,7 @@
   --color-lab-muted: #8a7968;
   --color-lab-muted-2: #a89a82;
 
-  --color-lab-accent: #ff7a4a; /* 코랄 — 주 강조 */
+  --color-lab-accent: #ee7d53; /* 코랄 — 주 강조 (기존 #ff7a4a는 채도 100%로 과포화, 살짝 낮춤) */
   --color-lab-accent-2: #f2a340; /* 앰버 — 보조 강조 */
   --color-lab-warn: #d98a2b;
   --color-lab-danger: #d9584a;
@@ -55,6 +55,7 @@
 
 html {
   color-scheme: light;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -64,6 +65,15 @@ body {
   -webkit-text-size-adjust: 100%;
   min-height: 100dvh;
   letter-spacing: -0.011em;
+  /* 한글 단어가 어절 중간에서 줄바꿈되지 않게 한다 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 
 /*
@@ -132,4 +142,13 @@ button {
 
 .lab-enter {
   animation: lab-fade-up 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/*
+ * 목록/카드가 여러 개 나열될 때 하나씩 순서대로 나타나게 하는 클래스.
+ * 지연 시간은 각 사용처에서 style={{ animationDelay: `${i * 60}ms` }}로 넘긴다
+ * (커스텀 프로퍼티 대신 표준 CSS 속성만 써서 타입 걱정 없이 쓸 수 있게 했다).
+ */
+.lab-stagger {
+  animation: lab-fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

@@ -19,7 +19,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-4 pb-16 sm:px-6">
-      <header className="flex flex-wrap items-center justify-between gap-3 py-5">
+      <header className="flex flex-wrap items-center justify-between gap-3 py-6">
         <Link to="/" className="group flex items-center gap-2.5">
           <SchoolLogo size={30} />
           <span className="flex items-baseline gap-2">
@@ -40,7 +40,7 @@ export function Layout({ children }: { children: ReactNode }) {
           ) : null}
           <Link
             to={isAdmin ? '/' : '/admin'}
-            className="rounded-lg border border-lab-border px-2 py-0.5 text-[11px] text-lab-muted transition hover:border-lab-accent/50 hover:text-lab-text"
+            className="rounded-lg border border-lab-border px-2 py-0.5 text-[11px] text-lab-muted transition-colors duration-150 hover:border-lab-accent/50 hover:bg-lab-surface-2 hover:text-lab-text"
           >
             {isAdmin ? '참가자 화면' : '관리자'}
           </Link>
@@ -49,7 +49,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="mt-10 flex items-center justify-center gap-2 border-t border-lab-border pt-5 text-[11px] text-lab-muted-2">
+      <footer className="mt-12 flex items-center justify-center gap-2 border-t border-lab-border pt-6 text-[11px] text-lab-muted-2">
         <SchoolLogo size={16} />
         <span>대천대신고등학교 오량진 GBL 부스</span>
       </footer>

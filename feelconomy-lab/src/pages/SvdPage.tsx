@@ -1,9 +1,11 @@
 /**
  * 페이지 5. SVD 분석.
  *
- * 참가자 자신의 [소비대안 × 감성욕구] 8×6 행렬을 SVD로 분해해서 보여준다.
- * "10개를 2개로 압축한다"는 v1의 설명 대신, v2는 "내가 8개 소비를 평가할 때
- * 반복적으로 나타나는 욕구의 결합을 찾는다"는 프레임으로 설명한다.
+ * 참가자 자신의 [소비대안 × 감성욕구] 행렬을 SVD로 분해해서 보여준다.
+ * "10개를 2개로 압축한다"는 v1의 설명 대신, v2 이후로는 "내가 여러 소비를
+ * 평가할 때 반복적으로 나타나는 욕구의 결합을 찾는다"는 프레임으로 설명한다.
+ * 화면에 나오는 개수는 모두 설정 상수에서 파생시킨다 — 대안 목록을 바꿨을 때
+ * 문구가 실제와 어긋나지 않게 하기 위함이다.
  *
  * 요구사항 §7 원문의 취지("특이값 누적 설명비율을 보고 r을 선택한다")를 그대로
  * 살려, 참가자가 직접 r=2 또는 r=3을 고르게 한다 — 이것 자체가 게임 요소다.
@@ -21,8 +23,8 @@ import {
   ProgressBar,
   SectionTitle,
 } from '@/components/ui'
-import { CONSUMPTION_ALTERNATIVES } from '@/config/alternatives'
-import { ANALYSIS_SPEC } from '@/config/model'
+import { ALTERNATIVE_DIM, CONSUMPTION_ALTERNATIVES } from '@/config/alternatives'
+import { ANALYSIS_SPEC, RATING_CELL_COUNT } from '@/config/model'
 import { NEED_AXES, NEED_DIM } from '@/config/needs'
 import { computeSvd, explainProjection, projectMatrixToLatent, projectToLatent } from '@/lib/math/svd'
 import { formatCoordinate, formatPercent, formatSigned } from '@/lib/util/format'
@@ -69,46 +71,51 @@ function SvdContent({
 
   return (
     <>
-      <SectionTitle>8개 소비, 몇 개의 진짜 이유로 압축될까?</SectionTitle>
+      <SectionTitle>{ALTERNATIVE_DIM}개 소비, 몇 개의 진짜 이유로 압축될까?</SectionTitle>
       <Lead>
-        내가 8개 소비대안을 평가한 48개의 숫자 안에는 반복되는 패턴이 있습니다. SVD는 그
-        패턴을 몇 개의 핵심 축으로 압축합니다.
+        내가 {ALTERNATIVE_DIM}개 소비대안을 평가한 {RATING_CELL_COUNT}개의 숫자 안에는
+        반복되는 패턴이 있습니다. SVD는 그 패턴을 몇 개의 핵심 축으로 압축합니다.
       </Lead>
 
       <Card className="mb-4">
         <button
           type="button"
           onClick={() => setShowMatrix((v) => !v)}
-          className="mb-3 flex w-full items-center justify-between text-sm font-bold text-lab-text"
+          className="mb-3 flex w-full items-center justify-between rounded-lg text-sm font-bold text-lab-text transition-colors duration-150 hover:text-lab-accent"
         >
-          <span>내가 입력한 평가행렬 A (8×6)</span>
+          <span>
+            내가 입력한 평가행렬 A ({ALTERNATIVE_DIM}×{NEED_DIM})
+          </span>
           <span aria-hidden className="text-lab-muted">
             {showMatrix ? '숨기기 ▲' : '보기 ▼'}
           </span>
         </button>
         {showMatrix ? (
-          <DataTable
-            headers={['소비대안', ...NEED_AXES.map((n) => n.label)]}
-            align={['left', ...NEED_AXES.map(() => 'center' as const)]}
-            rows={ratingsMatrix.map((row, i) => [
-              <span key="l" className="flex items-center gap-1.5 text-xs text-lab-text">
-                <span aria-hidden>{CONSUMPTION_ALTERNATIVES[i].icon}</span>
-                {CONSUMPTION_ALTERNATIVES[i].label}
-              </span>,
-              ...row.map((v, j) => (
-                <span key={j} className="font-mono text-xs tabular-nums text-lab-muted">
-                  {v}
-                </span>
-              )),
-            ])}
-          />
+          <div className="lab-enter">
+            <DataTable
+              headers={['소비대안', ...NEED_AXES.map((n) => n.label)]}
+              align={['left', ...NEED_AXES.map(() => 'center' as const)]}
+              rows={ratingsMatrix.map((row, i) => [
+                <span key="l" className="flex items-center gap-1.5 text-xs text-lab-text">
+                  <span aria-hidden>{CONSUMPTION_ALTERNATIVES[i].icon}</span>
+                  {CONSUMPTION_ALTERNATIVES[i].label}
+                </span>,
+                ...row.map((v, j) => (
+                  <span key={j} className="font-mono text-xs tabular-nums text-lab-muted">
+                    {v}
+                  </span>
+                )),
+              ])}
+            />
+          </div>
         ) : null}
       </Card>
 
       <Card className="mb-4">
         <p className="mb-1 text-sm font-bold text-lab-text">압축하면 정보가 얼마나 남을까?</p>
         <p className="mb-3 text-xs leading-relaxed text-lab-muted">
-          축을 몇 개 남기느냐에 따라 원래 48개 숫자의 패턴이 얼마나 보존되는지가 달라집니다.
+          축을 몇 개 남기느냐에 따라 원래 {RATING_CELL_COUNT}개 숫자의 패턴이 얼마나
+          보존되는지가 달라집니다.
         </p>
 
         <div className="space-y-2">
@@ -227,7 +234,7 @@ function SvdContent({
           V_r = [v₁{latentDim > 1 ? ', v₂' : ''}
           {latentDim > 2 ? ', …' : ''}]
         </p>
-        <p>소비대안 8개의 잠재좌표:</p>
+        <p>소비대안 {ALTERNATIVE_DIM}개의 잠재좌표:</p>
         <p className="my-2 text-lab-text">Z = A × V_r</p>
         <p>현재 욕구 q도 같은 축에 투영합니다:</p>
         <p className="my-2 text-lab-text">q* = q × V_r</p>
@@ -265,7 +272,7 @@ function AxisBreakdown({
   const maxAbs = Math.max(...contributions.map(Math.abs), 0.01)
 
   return (
-    <div className="rounded-xl border border-lab-border bg-lab-surface-2 p-3">
+    <div className="lab-enter rounded-xl border border-lab-border bg-lab-surface-2 p-3">
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-xs">
           <thead>

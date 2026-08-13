@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { FlowGuard } from '@/components/FlowGuard'
 import { PersonalMap } from '@/components/PersonalMap'
 import { Card, Lead, LinkButton, Notice, ProgressBar, SectionTitle } from '@/components/ui'
+import { ALTERNATIVE_DIM } from '@/config/alternatives'
 import { ANALYSIS_SPEC } from '@/config/model'
 import { computeSvd, projectMatrixToLatent, projectToLatent } from '@/lib/math/svd'
 import { formatCoordinate } from '@/lib/util/format'
@@ -46,8 +47,8 @@ function MapContent({
     <>
       <SectionTitle>내 소비대안들의 지도</SectionTitle>
       <Lead>
-        압축한 좌표를 지도 위 점으로 그렸습니다. 소비대안 8개와 지금 내 욕구가 같은
-        공간 위에 놓입니다.
+        압축한 좌표를 지도 위 점으로 그렸습니다. 소비대안 {ALTERNATIVE_DIM}개와 지금 내
+        욕구가 같은 공간 위에 놓입니다.
       </Lead>
 
       {latentDim > 2 ? (
@@ -89,7 +90,8 @@ function MapContent({
               ●
             </span>
             <span>
-              주황색 점 8개는 각각 <strong className="text-lab-text">소비대안</strong>입니다.
+              주황색 점 {ALTERNATIVE_DIM}개는 각각{' '}
+              <strong className="text-lab-text">소비대안</strong>입니다.
               가까운 위치에 있는 두 소비는 내 평가에서 비슷한 욕구 조합을 충족시킵니다.
             </span>
           </li>
@@ -110,7 +112,8 @@ function MapContent({
             </span>
             <span>
               가운데 굵은 선(0, 0)은 이 좌표계의 원점입니다. 아직 군집은 나누지 않았습니다 —
-              다음 단계에서 이 8개 점을 K={ANALYSIS_SPEC.defaultK}개 그룹으로 나눕니다.
+              다음 단계에서 이 {ALTERNATIVE_DIM}개 점을 K={ANALYSIS_SPEC.defaultK}개
+              그룹으로 나눕니다.
             </span>
           </li>
         </ul>

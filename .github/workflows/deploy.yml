@@ -1,0 +1,73 @@
+name: Deploy to GitHub Pages
+
+# feelconomy-lab을 빌드해서 GitHub Pages로 배포한다.
+#
+# 저장소 루트에 기획 문서(.txt)가 있고 앱은 feelconomy-lab/ 하위에 있으므로,
+# 모든 실행 단계는 그 폴더에서 돌린다(defaults.run.working-directory).
+#
+# VITE_BASE: Pages 프로젝트 사이트는 https://<계정>.github.io/<저장소>/ 에서
+# 서비스되므로 빌드 시 하위 경로를 알려줘야 한다. 저장소 이름이 바뀌면 이
+# 값도 함께 바꿔야 한다 (vite.config.ts의 base 주석 참고).
+
+on:
+  push:
+    branches: [main]
+  # 필요할 때 수동으로도 돌릴 수 있게 해 둔다
+  workflow_dispatch:
+
+# Pages 배포에 필요한 최소 권한만 준다
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포가 겹치면 나중 것만 살린다 (진행 중인 배포는 취소하지 않는다)
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: feelconomy-lab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: feelconomy-lab/package-lock.json
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 타입 검사
+        run: npm run typecheck
+
+      - name: 단위 테스트
+        run: npm test
+
+      - name: 빌드
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/
+        run: npm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: feelconomy-lab/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

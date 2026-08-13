@@ -3,7 +3,7 @@
  *
  * v1의 LatentMap은 기준 데이터셋 참가자 수백 명의 점을 배경에 뿌리고 그 안에서
  * 내 위치를 찾는 그림이었다. v2에는 그런 배경 집단이 없다 — 지도에 그려지는
- * 점은 오직 "내 소비대안 8개"와 "내 현재 욕구 1개"뿐이다. 점이 적으므로
+ * 점은 오직 "내 소비대안 전체"와 "내 현재 욕구 1개"뿐이다. 점이 적으므로
  * 범례 대신 각 점 옆에 아이콘과 이름을 직접 라벨로 붙인다.
  *
  * clusters를 넘기지 않으면 모든 소비대안이 같은 중립색으로 그려진다 (아직
@@ -99,7 +99,7 @@ export function PersonalMap({
         viewBox={`0 0 ${WIDTH} ${height}`}
         className="h-auto w-full"
         role="img"
-        aria-label={`잠재공간 지도. 소비대안 8개: ${describedAlternatives}. 내 욕구 위치: (${needProjected[axisX].toFixed(1)}, ${needProjected[axisY].toFixed(1)})`}
+        aria-label={`잠재공간 지도. 소비대안 ${alternativeLatent.length}개: ${describedAlternatives}. 내 욕구 위치: (${needProjected[axisX].toFixed(1)}, ${needProjected[axisY].toFixed(1)})`}
       >
         {xTicks.map((tick) => (
           <g key={`x${tick}`}>
@@ -182,7 +182,7 @@ export function PersonalMap({
             })
           : null}
 
-        {/* 소비대안 8개 */}
+        {/* 소비대안 점 */}
         {alternativeLatent.map((point, i) => {
           const c = clusterOf ? clusterOf[i] : -1
           const color = c >= 0 ? clusterColor(c) : 'var(--color-lab-accent-2)'

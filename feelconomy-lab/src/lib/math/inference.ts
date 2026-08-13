@@ -4,11 +4,11 @@
  * ============================================================================
  *  전체 흐름 (참가자 한 명, 한 세션 안에서 전부 계산된다)
  * ============================================================================
- *   ① 참가자가 현재 감성욕구 q(6개)와 소비대안×감성욕구 평가행렬 A(8×6)를 입력
+ *   ① 참가자가 현재 감성욕구 q(6개)와 소비대안×감성욕구 평가행렬 A를 입력
  *   ② A를 SVD로 분해 → 잠재축 V_r, 특이값, 설명분산
- *   ③ 소비대안 8개를 잠재공간에 투영 → Z = A · V_r
+ *   ③ 소비대안 전체를 잠재공간에 투영 → Z = A · V_r
  *   ④ 현재 욕구 q도 같은 잠재공간에 투영 → q* = q · V_r
- *   ⑤ Z(소비대안 8개)에 k-means 적용 → K개 군집, 각 군집에 즉석 이름 부여
+ *   ⑤ Z(소비대안 전체)에 k-means 적용 → K개 군집, 각 군집에 즉석 이름 부여
  *   ⑥ q*에서 각 군집 중심까지 거리 → 가장 가까운 군집 = "잠재수요 유형"
  *   ⑦ 그 군집 안에서 q*와 가장 가까운 소비대안 = "세부 잠재수요"
  *
@@ -111,13 +111,13 @@ export function runPersonalAnalysis(
   // ② SVD: A = U Σ Vᵀ
   const svd = computeSvd(input.alternativeRatings, options.latentDim)
 
-  // ③ 소비대안 8개를 잠재공간에 투영: Z = A · V_r
+  // ③ 소비대안 전체를 잠재공간에 투영: Z = A · V_r
   const alternativeLatent = projectMatrixToLatent(input.alternativeRatings, svd.loadings)
 
   // ④ 현재 욕구도 같은 공간에 투영: q* = q · V_r
   const needProjected = projectToLatent(input.currentNeeds, svd.loadings)
 
-  // ⑤ 소비대안 8개에 k-means 적용
+  // ⑤ 소비대안 전체에 k-means 적용
   const kmeans = runKMeans(alternativeLatent, { k, nInit, maxIterations, tolerance, randomSeed })
   const silhouette = meanSilhouette(alternativeLatent, kmeans.assignments, k)
 
@@ -154,7 +154,7 @@ export function runPersonalAnalysis(
       ? sortedClusterDistances[1] - sortedClusterDistances[0]
       : Infinity
 
-  // ⑦ 현재 욕구점에서 소비대안 8개 각각까지 거리
+  // ⑦ 현재 욕구점에서 소비대안 각각까지 거리
   const distancesToAlternatives = alternativeLatent.map((point) =>
     Math.sqrt(squaredEuclidean(needProjected, point)),
   )

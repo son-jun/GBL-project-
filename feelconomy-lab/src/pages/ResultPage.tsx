@@ -22,7 +22,7 @@ import {
   ProgressBar,
   SectionTitle,
 } from '@/components/ui'
-import { CONSUMPTION_ALTERNATIVES } from '@/config/alternatives'
+import { ALTERNATIVE_DIM, CONSUMPTION_ALTERNATIVES } from '@/config/alternatives'
 import { NEED_AXES } from '@/config/needs'
 import { CLUSTER_NAMING_EXPLANATION } from '@/lib/math/clusterNaming'
 import { formatCoordinate, formatDistance, formatScore, formatSigned } from '@/lib/util/format'
@@ -72,7 +72,7 @@ function ResultContent() {
               <span aria-hidden>{feelconomyType.type.icon}</span>
             </span>
             <div className="min-w-0">
-              <p className="font-mono text-xs font-bold tracking-widest" style={{ color: feelconomyType.type.color }}>
+              <p className="font-mono text-xs font-bold tracking-[0.2em]" style={{ color: feelconomyType.type.color }}>
                 {feelconomyType.code} · 필코노미 유형
               </p>
               <p className="text-lg font-black text-lab-text">{feelconomyType.type.name}</p>
@@ -85,11 +85,15 @@ function ResultContent() {
         </Card>
       ) : null}
 
-      {/* 카드 1: 가장 가까운 군집 */}
-      <Card tone="accent" className="mb-4">
-        <div className="grid gap-5 sm:grid-cols-[1.3fr_1fr]">
+      {/* 카드 1: 가장 가까운 군집 — 결과에서 가장 중요한 카드라 은은한 앰비언트 글로우로 무게감을 준다 */}
+      <Card tone="accent" className="relative mb-4 overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-gradient-to-br from-lab-accent/25 to-lab-accent-2/10 blur-2xl"
+        />
+        <div className="relative grid gap-5 sm:grid-cols-[1.3fr_1fr]">
           <div>
-            <p className="mb-2 font-mono text-xs tracking-wider text-lab-accent">
+            <p className="mb-2 font-mono text-xs tracking-[0.2em] text-lab-accent">
               나와 가장 가까운 소비 군집
             </p>
             <div className="mb-3">
@@ -108,7 +112,7 @@ function ResultContent() {
             </div>
           </div>
           <div>
-            <p className="mb-2 font-mono text-xs tracking-wider text-lab-accent">
+            <p className="mb-2 font-mono text-xs tracking-[0.2em] text-lab-accent">
               현재 나의 욕구 좌표
             </p>
             <div className="space-y-1.5">
@@ -153,9 +157,11 @@ function ResultContent() {
         <NeedMeansList cluster={cluster} color={color} />
       </Card>
 
-      {/* 카드 4: 전체 8개 소비 순위 */}
+      {/* 카드 4: 전체 소비대안 순위 */}
       <Card className="mb-4">
-        <p className="mb-1 text-sm font-bold text-lab-text">전체 소비대안 8개 순위</p>
+        <p className="mb-1 text-sm font-bold text-lab-text">
+          전체 소비대안 {ALTERNATIVE_DIM}개 순위
+        </p>
         <p className="mb-3 text-xs leading-relaxed text-lab-muted">
           지금 내 욕구점에서 가까운 순서입니다. 배정 군집에 속한 대안은 강조 표시했습니다.
         </p>
@@ -198,7 +204,7 @@ function ResultContent() {
 
       {/* 카드 5: 결과 해석 */}
       <Card tone="accent" className="mb-4">
-        <p className="mb-2 font-mono text-xs tracking-wider text-lab-accent">결과 해석</p>
+        <p className="mb-2 font-mono text-xs tracking-[0.2em] text-lab-accent">결과 해석</p>
         <p className="text-sm leading-relaxed text-lab-text sm:text-base">
           지금 내 욕구 패턴은{' '}
           <strong style={{ color }}>{cluster.name}</strong> 군집과 가장 가까웠고, 그 안에서는{' '}
@@ -304,7 +310,7 @@ function HandCalculationCard({ latentDim }: { latentDim: number }) {
   }
 
   return (
-    <Card>
+    <Card className="lab-enter">
       <p className="mb-3 text-sm font-bold text-lab-text">학습지 손계산과 비교</p>
       <div className="mb-4 grid gap-3 sm:grid-cols-2">
         {Array.from({ length: latentDim }, (_, k) => (

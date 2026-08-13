@@ -75,9 +75,9 @@ interface ButtonProps {
 
 const BUTTON_VARIANTS = {
   primary:
-    'bg-gradient-to-br from-lab-accent to-lab-accent-2 text-white shadow-[var(--shadow-glow-accent)] hover:brightness-110 disabled:from-lab-border disabled:to-lab-border disabled:text-lab-muted disabled:shadow-none',
+    'bg-gradient-to-br from-lab-accent to-lab-accent-2 text-white shadow-[var(--shadow-glow-accent)] hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_1px_2px_rgba(58,47,36,0.06),0_16px_30px_-12px_rgba(238,125,83,0.5)] disabled:from-lab-border disabled:to-lab-border disabled:text-lab-muted disabled:shadow-none disabled:hover:translate-y-0',
   secondary:
-    'border border-lab-border-strong bg-lab-surface-2 text-lab-text hover:border-lab-accent/50 disabled:opacity-40',
+    'border border-lab-border-strong bg-lab-surface-2 text-lab-text hover:border-lab-accent/50 hover:bg-lab-surface disabled:opacity-40 disabled:hover:border-lab-border-strong',
   ghost: 'text-lab-muted hover:text-lab-text disabled:opacity-40',
   danger:
     'border border-lab-danger/50 bg-lab-danger/10 text-lab-danger hover:bg-lab-danger/20 disabled:opacity-40',
@@ -100,7 +100,7 @@ export function Button({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`inline-flex items-center justify-center gap-2 rounded-2xl font-bold whitespace-nowrap transition-all duration-150 active:scale-[0.98] disabled:cursor-not-allowed ${sizeClass} ${BUTTON_VARIANTS[variant]} ${full ? 'w-full sm:flex-1' : 'sm:shrink-0'}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-2xl font-bold whitespace-nowrap transition-all duration-200 ease-out active:scale-[0.98] active:duration-75 disabled:cursor-not-allowed ${sizeClass} ${BUTTON_VARIANTS[variant]} ${full ? 'w-full sm:flex-1' : 'sm:shrink-0'}`}
     >
       {children}
     </button>
@@ -136,7 +136,7 @@ export function LinkButton({
   return (
     <Link
       to={to}
-      className={`inline-flex items-center justify-center gap-2 rounded-2xl font-bold whitespace-nowrap transition-all duration-150 active:scale-[0.98] ${sizeClass} ${BUTTON_VARIANTS[variant]} ${full ? 'w-full sm:flex-1' : 'sm:shrink-0'}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-2xl font-bold whitespace-nowrap transition-all duration-200 ease-out active:scale-[0.98] active:duration-75 ${sizeClass} ${BUTTON_VARIANTS[variant]} ${full ? 'w-full sm:flex-1' : 'sm:shrink-0'}`}
     >
       {children}
     </Link>
@@ -164,7 +164,7 @@ export function ProgressBar({ stepIndex, subLabel }: { stepIndex: number; subLab
   return (
     <div className="mb-6">
       <div className="mb-2 flex items-baseline justify-between gap-3">
-        <span className="font-mono text-xs tracking-wider text-lab-accent">
+        <span className="font-mono text-xs tracking-[0.2em] text-lab-accent">
           {stepIndex + 1} / {total}
         </span>
         <span className="text-sm font-semibold text-lab-text">
@@ -231,8 +231,8 @@ export function Notice({
 export function FormulaDetails({ summary, children }: { summary: string; children: ReactNode }) {
   return (
     <details className="group mt-4 rounded-2xl border border-lab-border bg-lab-surface-2">
-      <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-lab-accent">
-        <span aria-hidden className="mr-2 inline-block transition group-open:rotate-90">
+      <summary className="cursor-pointer list-none rounded-2xl px-4 py-3 text-sm font-semibold text-lab-accent transition-colors duration-150 hover:bg-lab-surface/60">
+        <span aria-hidden className="mr-2 inline-block transition-transform duration-200 group-open:rotate-90">
           ▶
         </span>
         {summary}
@@ -395,10 +395,10 @@ export function ScoreButtons({
             aria-checked={selected}
             aria-label={`${label} ${score}점`}
             onClick={() => onChange(score)}
-            className={`flex min-h-11 items-center justify-center rounded-lg border font-mono text-sm font-bold transition ${
+            className={`flex min-h-11 items-center justify-center rounded-lg border font-mono text-sm font-bold transition-all duration-150 ease-out active:scale-95 ${
               selected
                 ? activeClassName
-                : 'border-lab-border bg-lab-surface-2 text-lab-muted hover:border-lab-accent/50 hover:text-lab-text'
+                : 'border-lab-border bg-lab-surface-2 text-lab-muted hover:scale-105 hover:border-lab-accent/50 hover:text-lab-text'
             }`}
           >
             {score}

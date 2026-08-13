@@ -7,6 +7,8 @@
 
 import type { ReactNode } from 'react'
 import { LinkButton, Notice } from './ui'
+import { ALTERNATIVE_DIM } from '@/config/alternatives'
+import { NEED_DIM } from '@/config/needs'
 import { useSession } from '@/state/SessionContext'
 
 interface FlowGuardProps {
@@ -41,7 +43,7 @@ export function FlowGuard({
     return (
       <div className="space-y-4">
         <Notice tone="warn" title="감성욕구 입력이 완성되지 않았습니다">
-          6개 문항을 모두 입력해야 다음 단계로 진행할 수 있습니다.
+          {NEED_DIM}개 문항을 모두 입력해야 다음 단계로 진행할 수 있습니다.
         </Notice>
         <LinkButton to="/needs" variant="secondary">
           ← 욕구 입력으로
@@ -54,7 +56,8 @@ export function FlowGuard({
     return (
       <div className="space-y-4">
         <Notice tone="warn" title="소비대안 평가가 완성되지 않았습니다">
-          8개 소비대안 × 6개 감성욕구를 모두 평가해야 다음 단계로 진행할 수 있습니다.
+          {ALTERNATIVE_DIM}개 소비대안 × {NEED_DIM}개 감성욕구를 모두 평가해야 다음 단계로
+          진행할 수 있습니다.
         </Notice>
         <LinkButton to="/ratings" variant="secondary">
           ← 대안 평가로
