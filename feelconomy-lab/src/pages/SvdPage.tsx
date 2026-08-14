@@ -130,7 +130,7 @@ function SvdContent({
                 </span>
                 <div className="h-4 flex-1 overflow-hidden rounded bg-lab-surface-2">
                   <div
-                    className={`h-full rounded ${inUse ? 'bg-gradient-to-r from-lab-accent to-lab-accent-2' : 'bg-lab-border'}`}
+                    className={`h-full rounded ${inUse ? 'bg-lab-accent' : 'bg-lab-border'}`}
                     style={{ width: `${ratio * 100}%` }}
                   />
                 </div>

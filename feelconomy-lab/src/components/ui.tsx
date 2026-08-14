@@ -86,8 +86,11 @@ interface ButtonProps {
 }
 
 const BUTTON_VARIANTS = {
+  // 그라디언트를 뺐다. 코랄→앰버는 색상이 17°밖에 안 떨어져 있어 두 색이
+  // 섞이는 게 보이지 않고 탁하게만 보였다. 단색이 더 또렷하고, 흰 글씨 대비도
+  // 2.73 → 4.99로 올라간다. (docs/06 §2 색·표면)
   primary:
-    'bg-gradient-to-br from-lab-accent to-lab-accent-2 text-white shadow-[var(--shadow-glow-accent)] hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_1px_2px_rgba(58,47,36,0.06),0_16px_30px_-12px_rgba(238,125,83,0.5)] disabled:from-lab-border disabled:to-lab-border disabled:text-lab-muted disabled:shadow-none disabled:hover:translate-y-0',
+    'bg-lab-accent text-white shadow-[var(--shadow-glow-accent)] hover:bg-[#a4461a] hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow-accent-strong)] disabled:bg-lab-border disabled:text-lab-muted disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:bg-lab-border',
   secondary:
     'border border-lab-border-strong bg-lab-surface-2 text-lab-text hover:border-lab-accent/50 hover:bg-lab-surface disabled:opacity-40 disabled:hover:border-lab-border-strong',
   ghost: 'text-lab-muted hover:text-lab-text disabled:opacity-40',
@@ -193,7 +196,7 @@ export function ProgressBar({ stepIndex, subLabel }: { stepIndex: number; subLab
         aria-label={`전체 ${total}단계 중 ${stepIndex + 1}단계: ${current.label}`}
       >
         <div
-          className="h-full rounded-full bg-gradient-to-r from-lab-accent to-lab-accent-2 transition-[width] duration-500"
+          className="h-full rounded-full bg-lab-accent transition-[width] duration-500"
           style={{ width: `${percent}%` }}
         />
       </div>

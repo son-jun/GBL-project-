@@ -33,7 +33,8 @@ export function StartPage() {
         </p>
         <h1 className="text-4xl leading-tight font-black tracking-tight text-lab-text sm:text-6xl">
           FEELCONOMY
-          <span className="ml-2 inline-block rounded-2xl bg-gradient-to-br from-lab-accent to-lab-accent-2 px-3 py-1 text-3xl text-white sm:text-5xl">
+          {/* 머리말의 LAB 배지와 같은 학교 그린을 쓴다 */}
+          <span className="ml-2 inline-block rounded-2xl bg-brand-green px-3 py-1 text-3xl text-white sm:text-5xl">
             LAB
           </span>
         </h1>
@@ -56,7 +57,7 @@ export function StartPage() {
                 <span aria-hidden>{step.icon}</span>
                 <span
                   aria-hidden
-                  className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-lab-accent to-lab-accent-2 font-mono text-[10px] font-bold text-white shadow-[0_2px_6px_rgba(238,125,83,0.5)]"
+                  className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-lab-accent font-mono text-[10px] font-bold text-white shadow-[0_2px_6px_rgba(184,80,31,0.45)]"
                 >
                   {i + 1}
                 </span>

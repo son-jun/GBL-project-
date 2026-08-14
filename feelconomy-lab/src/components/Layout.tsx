@@ -26,7 +26,9 @@ export function Layout({ children }: { children: ReactNode }) {
             <span className="text-xl font-black tracking-tight text-lab-text sm:text-2xl">
               FEELCONOMY
             </span>
-            <span className="rounded-lg bg-gradient-to-br from-lab-accent to-lab-accent-2 px-1.5 py-0.5 font-mono text-xs font-black text-white">
+            {/* LAB 배지는 학교 로고의 짙은 그린. 강조 테라코타와 144° 떨어져 있어
+                머리말에서 두 색이 서로를 받쳐 준다 (v3까지는 화면 전체가 주황 하나였다) */}
+            <span className="rounded-lg bg-brand-green px-1.5 py-0.5 font-mono text-xs font-black text-white">
               LAB
             </span>
           </span>

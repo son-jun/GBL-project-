@@ -32,7 +32,7 @@ export function SchoolLogo({
       width={size}
       height={size}
       onError={() => setFailed(true)}
-      className={`shrink-0 rounded-full object-contain ${glow ? 'shadow-[0_0_24px_rgba(255,122,74,0.28)]' : ''} ${className}`}
+      className={`shrink-0 rounded-full object-contain ${glow ? 'shadow-[0_0_28px_rgba(31,94,76,0.22)]' : ''} ${className}`}
     />
   )
 }

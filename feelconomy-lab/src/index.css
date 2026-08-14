@@ -22,13 +22,39 @@
   --color-lab-muted: #8a7968;
   --color-lab-muted-2: #a89a82;
 
-  --color-lab-accent: #ee7d53; /* 코랄 — 주 강조 (기존 #ff7a4a는 채도 100%로 과포화, 살짝 낮춤) */
-  --color-lab-accent-2: #f2a340; /* 앰버 — 보조 강조 */
-  --color-lab-warn: #d98a2b;
-  --color-lab-danger: #d9584a;
-  --color-lab-positive: #6a9c5c;
+  /*
+   * ==========================================================================
+   *  강조·의미색 (v4에서 전면 재조정)
+   * ==========================================================================
+   * v3까지의 문제는 "색이 촌스럽다"가 아니라 두 가지였다.
+   *
+   * ① 대비 미달 — 코랄 #ee7d53은 아이보리 배경에서 대비가 2.52밖에 안 됐다.
+   *    큰 글씨 기준(3.0)도 못 넘는데 text-lab-accent로 40여 곳에 쓰였고,
+   *    주 버튼의 흰 글씨는 2.73이었다. 화면이 "흐릿하다"고 느껴진 실제 원인이다.
+   *
+   * ② 색상이 한 덩어리 — accent(H16)·accent-2(H33)·warn(H33)·danger(H6)가
+   *    전부 H6~H33의 27° 안에 몰려 있었다. accent-2와 warn은 색상이 아예 같고,
+   *    accent와 danger는 10° 차이였다. 배경(H36)·본문(H30)까지 주황 계열이라
+   *    화면 전체가 한 색으로 읽혔다.
+   *
+   * 그래서 v4는:
+   *   - 강조를 테라코타 하나로 통일한다. accent-2는 "경쟁하는 둘째 강조색"이
+   *     아니라 같은 색상(H16~19)의 밝은 짝으로 다시 정의했다 — 지도의 점처럼
+   *     연한 면이 필요한 곳에만 쓰고, 글자색으로는 쓰지 않는다.
+   *   - 정의만 해 두고 한 번도 쓰지 않던 학교 로고 그린을 실제로 쓴다.
+   *     테라코타와 144° 떨어져 있어 화면에 축이 하나 더 생긴다.
+   *   - 의미색(오류·주의·완료)의 색상을 서로 20° 이상 벌려 상태로 읽히게 했다.
+   *
+   * 아래 값은 전부 아이보리 배경 대비 4.5:1과 흰 글씨 대비 4.5:1을 통과한다.
+   * 새 색을 넣을 때도 두 기준을 먼저 확인한다.
+   */
+  --color-lab-accent: #b8501f; /* 테라코타 — 주 강조. 배경 4.61 / 흰글씨 4.99 */
+  --color-lab-accent-2: #e8825c; /* 밝은 테라코타 — 연한 면·데이터 점 전용, 글자색 금지 */
+  --color-lab-warn: #8c6a17; /* 황금 — 배경 4.62 */
+  --color-lab-danger: #b23a48; /* 크림슨 — 배경 5.39 */
+  --color-lab-positive: #367862; /* 초록 — 배경 4.82. 아래 브랜드 그린과 같은 계열 */
 
-  /* 학교 브랜드 컬러 — 로고의 짙은 그린을 소량 포인트로 사용 */
+  /* 학교 브랜드 컬러 — 로고의 짙은 그린. 강조 테라코타의 짝으로 쓴다 */
   --color-brand-green: #1f5e4c;
   --color-brand-green-light: #2f8a6c;
 
@@ -49,7 +75,9 @@
     'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
   --font-mono: 'JetBrains Mono', 'Consolas', 'D2Coding', monospace;
 
-  --shadow-glow-accent: 0 1px 2px rgba(58, 47, 36, 0.06), 0 10px 24px -10px rgba(255, 122, 74, 0.45);
+  /* 그림자는 강조색(#b8501f = 184,80,31)의 색조를 띤다 — 회색 그림자를 쓰지 않는다 */
+  --shadow-glow-accent: 0 1px 2px rgba(58, 47, 36, 0.06), 0 10px 24px -10px rgba(184, 80, 31, 0.5);
+  --shadow-glow-accent-strong: 0 1px 2px rgba(58, 47, 36, 0.06), 0 16px 30px -12px rgba(184, 80, 31, 0.55);
   --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 10px 28px -18px rgba(58, 47, 36, 0.25);
 }
 
@@ -87,9 +115,15 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 0;
+  /*
+   * 두 얼룩의 색을 갈라 놓는다 — v3에서는 둘 다 주황이라 배경도 한 덩어리로
+   * 보였다. 왼쪽 위는 강조 테라코타, 오른쪽 위는 학교 그린의 아주 옅은 기운을
+   * 깔아서 화면 양 끝의 온도를 다르게 한다. 눈에 띄게 보이면 안 되므로
+   * opacity는 아주 낮게 유지한다.
+   */
   background:
-    radial-gradient(50% 40% at 12% 0%, rgba(255, 122, 74, 0.07), transparent 65%),
-    radial-gradient(45% 35% at 100% 15%, rgba(242, 163, 64, 0.08), transparent 65%);
+    radial-gradient(50% 40% at 12% 0%, rgba(184, 80, 31, 0.07), transparent 65%),
+    radial-gradient(45% 38% at 100% 12%, rgba(31, 94, 76, 0.06), transparent 65%);
 }
 
 /* 아주 미세한 종이 그레인 — 완전히 평평한 색면이 주는 인공적인 느낌을 줄인다 */
