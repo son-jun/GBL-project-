@@ -277,13 +277,13 @@ function AxisBreakdown({
         <table className="w-full border-collapse text-xs">
           <thead>
             <tr className="border-b border-lab-border text-lab-muted">
-              <th className="px-1.5 py-1.5 text-left font-semibold">감성욕구</th>
-              <th className="px-1.5 py-1.5 text-right font-semibold">내 점수</th>
-              <th className="px-1.5 py-1.5 text-center font-semibold">×</th>
-              <th className="px-1.5 py-1.5 text-right font-semibold">축 {axis + 1} 계수</th>
-              <th className="px-1.5 py-1.5 text-center font-semibold">=</th>
-              <th className="px-1.5 py-1.5 text-right font-semibold">기여</th>
-              <th className="px-1.5 py-1.5 text-left font-semibold">크기</th>
+              <th className="px-1.5 py-1.5 text-left font-medium">감성욕구</th>
+              <th className="px-1.5 py-1.5 text-right font-medium">내 점수</th>
+              <th className="px-1.5 py-1.5 text-center font-medium">×</th>
+              <th className="px-1.5 py-1.5 text-right font-medium">축 {axis + 1} 계수</th>
+              <th className="px-1.5 py-1.5 text-center font-medium">=</th>
+              <th className="px-1.5 py-1.5 text-right font-medium">기여</th>
+              <th className="px-1.5 py-1.5 text-left font-medium">크기</th>
             </tr>
           </thead>
           <tbody className="font-mono tabular-nums">

@@ -53,9 +53,21 @@ export function SectionTitle({ children }: { children: ReactNode }) {
   )
 }
 
-/** 본문 흐름에 쓰는 짧은 설명 문단 — SectionTitle과 분리된 독립 요소로만 쓴다 */
+/**
+ * 본문 흐름에 쓰는 짧은 설명 문단 — SectionTitle과 분리된 독립 요소로만 쓴다.
+ *
+ * max-w-[58ch]로 폭을 묶는다. 레이아웃 컨테이너가 max-w-5xl(1024px)이라
+ * 제한이 없으면 데스크톱에서 한 줄이 100자를 넘어가고, 그러면 눈이 다음 줄
+ * 첫 글자를 찾지 못해 읽기가 급격히 힘들어진다. 한글은 같은 글자 수에서
+ * 라틴 문자보다 폭이 넓으므로 권장치(65자)보다 살짝 좁게 잡았다.
+ * (docs/06_AI티_제거_디자인_규칙.md §2 타이포그래피)
+ */
 export function Lead({ children }: { children: ReactNode }) {
-  return <p className="mb-5 text-sm leading-relaxed text-lab-muted sm:text-base">{children}</p>
+  return (
+    <p className="mb-5 max-w-[58ch] text-sm leading-relaxed text-lab-muted sm:text-base">
+      {children}
+    </p>
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -193,31 +205,93 @@ export function ProgressBar({ stepIndex, subLabel }: { stepIndex: number; subLab
 // 알림
 // ---------------------------------------------------------------------------
 
+type NoticeTone = 'info' | 'warn' | 'danger' | 'success'
+
+/**
+ * 알림 아이콘.
+ *
+ * 이전에는 이모지(ℹ️⚠️⛔✅)를 썼다. 이모지는 OS마다 다른 그림으로 그려지고
+ * 채도가 높은 풀컬러라, 이 사이트의 낮은 채도 종이 팔레트 위에서 혼자 튀었다.
+ * 같은 굵기의 선 도형으로 바꿔 currentColor를 따르게 했다.
+ * (docs/06_AI티_제거_디자인_규칙.md §5-8 "이모지를 장식으로 쓰지 않는다")
+ *
+ * 톤을 색으로만 구분하지 않기 위해 도형 자체를 다르게 둔다 — 삼각형(주의),
+ * ×(오류), 체크(완료), i(정보). 색각 이상이나 흑백 출력에서도 구분된다.
+ */
+function NoticeIcon({ tone }: { tone: NoticeTone }) {
+  const common = {
+    width: 18,
+    height: 18,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    'aria-hidden': true,
+  }
+  if (tone === 'warn') {
+    return (
+      <svg {...common}>
+        <path d="M12 4 2.8 20.2h18.4L12 4Z" />
+        <path d="M12 10.5v3.5M12 17.2h.01" />
+      </svg>
+    )
+  }
+  if (tone === 'danger') {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="m9 9 6 6M15 9l-6 6" />
+      </svg>
+    )
+  }
+  if (tone === 'success') {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="m8.4 12.2 2.5 2.5 4.7-5.2" />
+      </svg>
+    )
+  }
+  return (
+    <svg {...common}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 11.4v4.6M12 7.9h.01" />
+    </svg>
+  )
+}
+
 export function Notice({
   tone = 'info',
   title,
   children,
 }: {
-  tone?: 'info' | 'warn' | 'danger' | 'success'
+  tone?: NoticeTone
   title?: string
   children: ReactNode
 }) {
   const styles = {
-    info: 'border-lab-accent/30 bg-lab-accent/[0.06] text-lab-text',
-    warn: 'border-lab-warn/40 bg-lab-warn/[0.08] text-lab-text',
-    danger: 'border-lab-danger/40 bg-lab-danger/[0.08] text-lab-text',
-    success: 'border-lab-positive/40 bg-lab-positive/[0.08] text-lab-text',
+    info: 'border-lab-accent/30 bg-lab-accent/[0.06]',
+    warn: 'border-lab-warn/40 bg-lab-warn/[0.08]',
+    danger: 'border-lab-danger/40 bg-lab-danger/[0.08]',
+    success: 'border-lab-positive/40 bg-lab-positive/[0.08]',
   }[tone]
-  const icon = { info: 'ℹ️', warn: '⚠️', danger: '⛔', success: '✅' }[tone]
+  const iconColor = {
+    info: 'text-lab-accent',
+    warn: 'text-lab-warn',
+    danger: 'text-lab-danger',
+    success: 'text-lab-positive',
+  }[tone]
   return (
-    <div className={`rounded-2xl border p-4 text-sm leading-relaxed ${styles}`}>
+    <div className={`rounded-2xl border p-4 text-sm leading-relaxed text-lab-text ${styles}`}>
       <div className="flex gap-3">
-        <span aria-hidden className="shrink-0">
-          {icon}
+        <span className={`mt-0.5 shrink-0 ${iconColor}`}>
+          <NoticeIcon tone={tone} />
         </span>
         <div className="min-w-0 flex-1">
           {title ? <p className="mb-1 font-bold">{title}</p> : null}
-          <div className="whitespace-pre-line text-lab-muted">{children}</div>
+          <div className="max-w-[62ch] whitespace-pre-line text-lab-muted">{children}</div>
         </div>
       </div>
     </div>
@@ -317,11 +391,13 @@ export function DataTable({
     <div className="-mx-1 overflow-x-auto">
       <table className="w-full min-w-full border-collapse text-sm">
         <thead>
+          {/* 표 머리글은 Medium(500). SemiBold는 본문 강조와 굵기가 겹쳐서,
+              작고 흐린 라벨에는 한 단계 아래가 위계상 맞다 */}
           <tr className="border-b border-lab-border">
             {headers.map((header, i) => (
               <th
                 key={header}
-                className={`px-2 py-2 text-xs font-semibold whitespace-nowrap text-lab-muted ${alignClass(i)}`}
+                className={`px-2 py-2 text-xs font-medium whitespace-nowrap text-lab-muted ${alignClass(i)}`}
               >
                 {header}
               </th>

@@ -13,7 +13,7 @@ import { useSession } from '@/state/SessionContext'
 
 export function NeedsPage() {
   const { currentNeeds, setNeed, needsComplete } = useSession()
-  const rowRefs = useRef<(HTMLDivElement | null)[]>([])
+  const rowRefs = useRef<(HTMLLIElement | null)[]>([])
 
   const answered = currentNeeds.filter((v) => v !== null).length
 
@@ -33,7 +33,8 @@ export function NeedsPage() {
         정답은 없습니다. 지금 이 순간 느껴지는 대로 {NEED_SCORE_MAX}점 만점으로 눌러 주세요.
       </Lead>
 
-      <div className="sticky top-0 z-10 -mx-4 mb-4 border-b border-lab-border bg-lab-bg/90 px-4 py-2.5 backdrop-blur sm:-mx-6 sm:px-6">
+      {/* z-40 = index.css에 적어 둔 "화면에 고정되는 막대" 단계 */}
+      <div className="sticky top-0 z-40 -mx-4 mb-4 border-b border-lab-border bg-lab-bg/90 px-4 py-2.5 backdrop-blur sm:-mx-6 sm:px-6">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm">
             <span className="font-mono font-bold text-lab-accent">{answered}</span>
@@ -45,11 +46,13 @@ export function NeedsPage() {
         </div>
       </div>
 
-      <div className="space-y-3">
+      {/* 번호가 매겨진 문항 묶음이므로 ol/li로 표시한다. 보조기술이 "6개 중 3번째"
+          같은 위치를 읽어 줄 수 있고, 마커는 list-none으로 감춘다 */}
+      <ol className="list-none space-y-3 p-0">
         {NEED_AXES.map((axis, index) => {
           const value = currentNeeds[index]
           return (
-            <div
+            <li
               key={axis.key}
               ref={(el) => {
                 rowRefs.current[index] = el
@@ -81,10 +84,10 @@ export function NeedsPage() {
                   <span>매우 그렇다</span>
                 </div>
               </Card>
-            </div>
+            </li>
           )
         })}
-      </div>
+      </ol>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row-reverse">
         <LinkButton to="/type" size="lg" full disabled={!needsComplete}>

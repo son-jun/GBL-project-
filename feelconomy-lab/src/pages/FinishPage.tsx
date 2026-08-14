@@ -109,9 +109,10 @@ export function FinishPage() {
         </p>
       </Card>
 
-      <div className="mb-5 space-y-2">
+      {/* 분석 순서를 되짚는 목록 — 순서 자체가 내용이므로 ol/li로 표시한다 */}
+      <ol className="mb-5 list-none space-y-2 p-0">
         {RECAP_STEPS.map((step, i) => (
-          <div key={step.title} className="lab-stagger" style={{ animationDelay: `${i * 45}ms` }}>
+          <li key={step.title} className="lab-stagger" style={{ animationDelay: `${i * 45}ms` }}>
             <Card className="py-3.5">
               <div className="flex gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-lab-surface-2 text-lg">
@@ -134,9 +135,9 @@ export function FinishPage() {
                 ↓
               </p>
             ) : null}
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
 
       <Card className="mb-5">
         <p className="mb-2 text-sm font-bold text-lab-text">
@@ -164,7 +165,7 @@ export function FinishPage() {
 
       <div className="mt-6 space-y-3">
         <Button onClick={startNextParticipant} size="lg" full>
-          🔄 세션 초기화 — 다음 참가자 시작
+          세션 초기화 — 다음 참가자 시작
         </Button>
         <p className="text-center text-xs text-lab-muted">
           이 버튼을 누르면 화면에서 내 정보가 모두 지워집니다. (저장된 분석 데이터는 남습니다)

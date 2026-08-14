@@ -61,7 +61,8 @@ export function StartPage() {
                   {i + 1}
                 </span>
               </div>
-              <p className="font-mono text-[10px] text-lab-accent">STEP {i + 1}</p>
+              {/* 배지가 이미 번호를 보여주므로 "STEP n" 텍스트는 뺐다 — 같은 정보를
+                  세 번(배지·STEP·라벨) 반복하던 것을 두 번으로 줄인다 */}
               <p className="text-[11px] leading-tight text-lab-muted">{step.label}</p>
             </li>
           ))}

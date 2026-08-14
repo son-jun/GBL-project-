@@ -12,9 +12,11 @@ import { LinkButton, SectionTitle } from '@/components/ui'
 import { AdminParticipantsTab } from './AdminParticipantsTab'
 import { AdminSpecTab } from './AdminSpecTab'
 
+// 탭 이모지를 뺐다 — 라벨만으로 뜻이 충분히 전달되고, 이모지는 장식일 뿐이었다
+// (docs/06_AI티_제거_디자인_규칙.md §5-8)
 const TABS = [
-  { id: 'spec', label: '분석 규격', icon: '🧭' },
-  { id: 'participants', label: '참가자 데이터', icon: '👥' },
+  { id: 'spec', label: '분석 규격' },
+  { id: 'participants', label: '참가자 데이터' },
 ] as const
 
 type TabId = (typeof TABS)[number]['id']
@@ -48,7 +50,6 @@ export function AdminPage() {
                 : 'text-lab-muted hover:bg-lab-surface-2 hover:text-lab-text'
             }`}
           >
-            <span aria-hidden>{t.icon}</span>
             {t.label}
           </button>
         ))}

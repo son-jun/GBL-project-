@@ -104,6 +104,18 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
 }
 
+/*
+ * z-index 척도 — 임의 값을 새로 만들지 않고 아래 네 단계만 쓴다.
+ * (docs/06_AI티_제거_디자인_규칙.md §2 코드 품질)
+ *
+ *    0  배경 장식 (body::before 얼룩, body::after 그레인)
+ *    1  본문 (#root)
+ *   40  화면에 고정되는 막대 — sticky 진행바 같은 것
+ *   50  오버레이 — 모달·드롭다운 (아직 없음)
+ *
+ * 배경 장식이 큰 값이 아니라 0인 이유: 이 사이트의 장식은 본문 위에 덮이는
+ * 노이즈가 아니라 본문 뒤에 깔리는 종이 질감이다. 그래서 본문(1)보다 아래에 둔다.
+ */
 #root {
   position: relative;
   z-index: 1;
