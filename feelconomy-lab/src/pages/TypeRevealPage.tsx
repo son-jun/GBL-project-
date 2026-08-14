@@ -9,7 +9,7 @@
 
 import { useState } from 'react'
 import { FlowGuard } from '@/components/FlowGuard'
-import { Card, Lead, LinkButton, Notice, ProgressBar, SectionTitle } from '@/components/ui'
+import { AnimatedBar, Card, Lead, LinkButton, Notice, ProgressBar, SectionTitle } from '@/components/ui'
 import { FEELCONOMY_TYPES, TYPE_DIMENSIONS } from '@/config/feelconomyTypes'
 import { alternativeIcon, alternativeLabel } from '@/config/alternatives'
 import { NEED_DIM } from '@/config/needs'
@@ -83,7 +83,7 @@ function TypeRevealContent() {
           3가지 질문에 대한 내 대답으로 코드 {code}가 만들어졌습니다.
         </p>
         <div className="space-y-4">
-          {dimensions.map((dimension) => {
+          {dimensions.map((dimension, dimIndex) => {
             const total = dimension.positiveScore + dimension.negativeScore || 1
             const positivePercent = (dimension.positiveScore / total) * 100
             const wonPositive = dimension.positiveScore >= dimension.negativeScore
@@ -96,12 +96,13 @@ function TypeRevealContent() {
                   >
                     {dimension.positiveLabel}
                   </span>
-                  <div className="h-3 flex-1 overflow-hidden rounded-full bg-lab-surface-2">
-                    <div
-                      className="h-full rounded-full"
-                      style={{ width: `${positivePercent}%`, backgroundColor: type.color }}
-                    />
-                  </div>
+                  <AnimatedBar
+                    percent={positivePercent}
+                    delayMs={dimIndex * 150}
+                    fillStyle={{ backgroundColor: type.color }}
+                    heightClassName="h-3"
+                    roundedClassName="rounded-full"
+                  />
                   <span
                     className={`w-20 shrink-0 text-xs font-semibold ${!wonPositive ? 'text-lab-text' : 'text-lab-muted'}`}
                   >

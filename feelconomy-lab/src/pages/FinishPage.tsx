@@ -7,7 +7,7 @@
 
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Lead, LinkButton, Notice, ProgressBar, SectionTitle } from '@/components/ui'
-import { ALTERNATIVE_DIM } from '@/config/alternatives'
+import { ALTERNATIVE_DIM, alternativeIcon, alternativeLabel } from '@/config/alternatives'
 import { MBTI_ESTIMATE_BADGE } from '@/config/mbtiAxes'
 import { NEED_DIM } from '@/config/needs'
 import { useSession } from '@/state/SessionContext'
@@ -87,15 +87,33 @@ export function FinishPage() {
           <p className="mt-1 text-xl font-black" style={{ color: feelconomyType.type.color }}>
             {feelconomyType.code} · {feelconomyType.type.name} {feelconomyType.type.icon}
           </p>
+          <p className="mt-2 text-sm font-semibold" style={{ color: feelconomyType.type.color }}>
+            "{feelconomyType.type.tagline}"
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-lab-muted sm:text-sm">
+            {feelconomyType.type.description}
+          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <span className="text-[11px] text-lab-muted">이런 소비와 잘 어울려요</span>
+            {feelconomyType.type.exampleAlternatives.map((key) => (
+              <span
+                key={key}
+                className="inline-flex items-center gap-1 rounded-full border border-lab-border bg-white px-2.5 py-1 text-xs font-semibold text-lab-text"
+              >
+                <span aria-hidden>{alternativeIcon(key)}</span>
+                {alternativeLabel(key)}
+              </span>
+            ))}
+          </div>
           {mbtiEstimate ? (
-            <p className="mt-2 border-t border-lab-border/60 pt-2 text-xs text-lab-muted">
+            <p className="mt-4 border-t border-lab-border/60 pt-3 text-xs text-lab-muted">
               MBTI 형식으로 바꿔 보면{' '}
               <span className="font-mono font-bold text-lab-text">{mbtiEstimate.code}</span>{' '}
               였습니다 —{' '}
               <span className="text-lab-warn">{MBTI_ESTIMATE_BADGE}이고 정식 검사는 아닙니다.</span>
             </p>
           ) : null}
-          <p className="mt-1 text-xs text-lab-muted">오래 기억해 두고, 다음에 또 확인해 보세요.</p>
+          <p className="mt-2 text-xs text-lab-muted">오래 기억해 두고, 다음에 또 확인해 보세요.</p>
         </Card>
       ) : null}
 
@@ -159,7 +177,8 @@ export function FinishPage() {
 
       {result && participantId ? (
         <p className="mt-4 text-center font-mono text-[11px] text-lab-muted">
-          {participantId} · {result.specVersion} · 데이터 저장 완료
+          {participantId} · {result.specVersion} ·{' '}
+          <span className="font-bold text-lab-positive">데이터 저장 완료</span>
         </p>
       ) : null}
 

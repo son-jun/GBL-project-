@@ -10,6 +10,8 @@
 
 import type { CSSProperties, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { useAnimatedValue } from '@/lib/util/useAnimatedValue'
+import { useCountUp } from '@/lib/util/useCountUp'
 
 // ---------------------------------------------------------------------------
 // 카드 / 섹션
@@ -440,6 +442,72 @@ export function ShareBar({ share, color }: { share: number; color?: string }) {
       </span>
     </div>
   )
+}
+
+/**
+ * 마운트되면 0에서 실제 값까지 자라나는 막대. SVD 설명분산, 군집 거리, 필코노미
+ * 유형 판정, 욕구 평균처럼 "계산 결과를 막대로 보여주는" 모든 화면이 이걸
+ * 공유한다 — 그래프가 정적으로 툭 나타나지 않고, 그 자리에서 계산되는 것처럼
+ * 보이게 하기 위함이다(2026-08-15, docs/06 §5 규칙 4 참고).
+ *
+ * 색은 두 방식 중 하나로 준다: fillClassName(예: 'bg-lab-accent', 상태에 따라
+ * 바뀌는 토큰 색일 때) 또는 fillStyle(예: {backgroundColor: cluster color},
+ * 참가자 데이터에서 계산된 임의의 색일 때). 색 지정 규칙(docs/06 §5 규칙 1)에
+ * 따라 fillClassName은 항상 --color-lab-* 토큰 클래스만 받는다.
+ */
+export function AnimatedBar({
+  percent,
+  delayMs = 0,
+  fillClassName = '',
+  fillStyle,
+  trackClassName = 'bg-lab-surface-2',
+  heightClassName = 'h-4',
+  roundedClassName = 'rounded',
+}: {
+  /** 0~100 사이의 최종 너비 */
+  percent: number
+  delayMs?: number
+  fillClassName?: string
+  fillStyle?: CSSProperties
+  trackClassName?: string
+  heightClassName?: string
+  roundedClassName?: string
+}) {
+  const animated = useAnimatedValue(percent, delayMs)
+  return (
+    <div className={`${heightClassName} flex-1 overflow-hidden ${roundedClassName} ${trackClassName}`}>
+      <div
+        className={`h-full ${roundedClassName} transition-[width] duration-700 ease-out ${fillClassName}`}
+        style={{ width: `${animated}%`, ...fillStyle }}
+      />
+    </div>
+  )
+}
+
+/**
+ * 0에서 실제 값까지 세는 것처럼 보이는 숫자. 결과 화면의 좌표·거리처럼
+ * "그 자리에서 막 계산된" 인상을 주고 싶은 숫자에 쓴다(2026-08-16 추가).
+ * AnimatedBar와 함께 결과 화면을 더 동적으로 만들어 달라는 요청에 대응했다.
+ */
+export function AnimatedNumber({
+  value,
+  decimals = 2,
+  delayMs = 0,
+  durationMs = 900,
+  signed = false,
+  className = '',
+}: {
+  value: number
+  decimals?: number
+  delayMs?: number
+  durationMs?: number
+  /** true면 양수 앞에 +를 붙인다(편차·오차처럼 부호가 의미 있는 값용) */
+  signed?: boolean
+  className?: string
+}) {
+  const animated = useCountUp(value, durationMs, delayMs)
+  const text = signed && animated > 0 ? `+${animated.toFixed(decimals)}` : animated.toFixed(decimals)
+  return <span className={`tabular-nums ${className}`}>{text}</span>
 }
 
 // ---------------------------------------------------------------------------

@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import { FlowGuard } from '@/components/FlowGuard'
 import { PersonalMap } from '@/components/PersonalMap'
 import {
+  AnimatedBar,
   Card,
   ClusterBadge,
   clusterColor,
@@ -116,15 +117,13 @@ function ClusterContent() {
                 >
                   {cluster.name}
                 </span>
-                <div className="h-5 flex-1 overflow-hidden rounded-md bg-lab-surface-2">
-                  <div
-                    className="flex h-full items-center justify-end rounded-md pr-1.5"
-                    style={{
-                      width: `${Math.max(6, (distance / maxDistance) * 100)}%`,
-                      backgroundColor: isNearest ? color : `${color}55`,
-                    }}
-                  />
-                </div>
+                <AnimatedBar
+                  percent={Math.max(6, (distance / maxDistance) * 100)}
+                  delayMs={rank * 130}
+                  fillStyle={{ backgroundColor: isNearest ? color : `${color}55` }}
+                  heightClassName="h-5"
+                  roundedClassName="rounded-md"
+                />
                 <span
                   className={`w-14 shrink-0 text-right font-mono text-sm tabular-nums ${isNearest ? 'font-black text-lab-accent' : 'text-lab-muted'}`}
                 >

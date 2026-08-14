@@ -37,7 +37,11 @@ export function NeedsPage() {
       <div className="sticky top-0 z-40 -mx-4 mb-4 border-b border-lab-border bg-lab-bg/90 px-4 py-2.5 backdrop-blur sm:-mx-6 sm:px-6">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm">
-            <span className="font-mono font-bold text-lab-accent">{answered}</span>
+            <span
+              className={`font-mono font-bold ${needsComplete ? 'text-lab-positive' : 'text-lab-accent'}`}
+            >
+              {answered}
+            </span>
             <span className="text-lab-muted"> / {NEED_AXES.length} 문항 완료</span>
           </p>
           <LinkButton to="/type" disabled={!needsComplete}>

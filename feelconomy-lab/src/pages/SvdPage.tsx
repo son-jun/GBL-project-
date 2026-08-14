@@ -14,6 +14,7 @@
 import { useMemo, useState } from 'react'
 import { FlowGuard } from '@/components/FlowGuard'
 import {
+  AnimatedBar,
   Button,
   Card,
   DataTable,
@@ -128,12 +129,11 @@ function SvdContent({
                 >
                   축 {k + 1}
                 </span>
-                <div className="h-4 flex-1 overflow-hidden rounded bg-lab-surface-2">
-                  <div
-                    className={`h-full rounded ${inUse ? 'bg-lab-accent' : 'bg-lab-border'}`}
-                    style={{ width: `${ratio * 100}%` }}
-                  />
-                </div>
+                <AnimatedBar
+                  percent={ratio * 100}
+                  delayMs={k * 60}
+                  fillClassName={inUse ? 'bg-lab-accent' : 'bg-lab-border'}
+                />
                 <span className="w-14 shrink-0 text-right font-mono text-xs tabular-nums text-lab-text">
                   {formatPercent(ratio, 1)}
                 </span>
